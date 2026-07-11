@@ -58,7 +58,7 @@ impl Default for LlmConfig {
     fn default() -> Self {
         Self {
             provider: default_provider(),
-            model: "deepseek-chat".into(),
+            model: "deepseek-v4-flash".into(),
             temperature: default_temperature(),
             max_tokens: default_max_tokens(),
             api_key_env: "DEEPSEEK_API_KEY".into(),
