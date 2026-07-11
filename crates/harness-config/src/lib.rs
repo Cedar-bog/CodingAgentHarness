@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Default, Deserialize)]
 pub struct HarnessConfig {
     #[serde(default)]
     pub agent: AgentConfig,
