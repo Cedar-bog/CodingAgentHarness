@@ -1,48 +1,52 @@
 # Coding Agent Harness
 
-A Rust coding agent harness with extensible tool dispatch, governance guardrails, feedback loop, and memory.
+一个用 Rust 编写的编码智能体框架（Coding Agent Harness），提供可扩展的工具分发、治理护栏、反馈闭环和记忆系统。
 
-## Quick Start
+## 快速开始
 
 ### Docker
 
 ```bash
 docker build -t coding-agent-harness .
-docker run -it -e DEEPSEEK_API_KEY=xxx -v $(pwd):/workspace coding-agent-harness "your task here"
+docker run -it -e DEEPSEEK_API_KEY=xxx -v $(pwd):/workspace coding-agent-harness "你的任务描述"
 ```
 
-### Local
+### 本地运行
 
 ```bash
 cargo build --release
-export DEEPSEEK_API_KEY=your-key
-./target/release/harness "your task here"
+export DEEPSEEK_API_KEY=你的密钥
+./target/release/harness "你的任务描述"
 ```
 
-## Configuration
+## 配置
 
-Copy `harness.toml` and edit as needed. See default config for all options.
+复制 `harness.toml` 并根据需要编辑。所有配置项均有默认值。
 
-## Key Management
+## 密钥管理
 
 ```bash
-export DEEPSEEK_API_KEY=your-key
+export DEEPSEEK_API_KEY=你的密钥
 ```
 
-## Architecture
+密钥优先级：环境变量 > OS 钥匙串 > 配置文件。
 
-- `harness-core`: Agent loop + shared types
-- `harness-llm`: LLM abstraction (DeepSeek/OpenAI/Mock)
-- `harness-tools`: Tool trait + 6 built-in tools + plugin system
-- `harness-memory`: SQLite memory store
-- `harness-guard`: Guardrails + HITL
-- `harness-feedback`: Test/compile/lint validators
-- `harness-config`: TOML configuration
+## 架构
 
-## Testing
+| Crate | 功能 |
+|-------|------|
+| `harness-core` | Agent 主循环 + 共享类型 |
+| `harness-llm` | LLM 抽象层（DeepSeek/OpenAI/Mock） |
+| `harness-tools` | Tool trait + 5 个内置工具 + 插件系统 |
+| `harness-memory` | SQLite 记忆存储 |
+| `harness-guard` | 治理护栏 + 人工确认（HITL） |
+| `harness-feedback` | 测试/编译/lint 校验器 |
+| `harness-config` | TOML 配置管理 |
+
+## 测试
 
 ```bash
 cargo test --workspace
 ```
 
-All core mechanisms have mock-LLM deterministic unit tests.
+所有核心机制均使用 Mock LLM 编写了确定性单元测试，不依赖网络和真实 API。
