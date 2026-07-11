@@ -1,3 +1,4 @@
+pub mod hitl;
 pub mod rules;
 
 use harness_core::ToolCall;
