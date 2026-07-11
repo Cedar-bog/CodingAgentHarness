@@ -17,4 +17,5 @@ harness-feedback = { path = "../harness-feedback" }
 harness-config = { path = "../harness-config" }
 tokio = { workspace = true }
 serde_json = { workspace = true }
+async-trait = { workspace = true }
 toml = "0.8"
