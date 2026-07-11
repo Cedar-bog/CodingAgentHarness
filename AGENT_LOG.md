@@ -133,14 +133,24 @@
 - **合并**: `feat/task-3-openai-provider` → `master`
 - **人工干预**: 无
 
+### 015 | Task 4: Tool Trait + ToolRegistry
+- **时间**: Task 3 完成后
+- **操作**: 创建分支 `feat/task-4-tool-registry`，分 RED/GREEN
+- **RED**: commit `c1346ce` → CI #22 failure ✅
+- **GREEN**: commit `d6d5931` → CI #23 success ✅
+- **产出**: `harness-tools` crate（Tool trait + ToolRegistry + ToolInfo），5 tests
+- **注意**: 适配实际类型（`ToolResult.content` 而非 `output` 等）
+- **合并**: `feat/task-4-tool-registry` → `master`
+- **人工干预**: 无
+
 ---
 
 ## 统计
 
 | 指标 | 值 |
 |------|-----|
-| 总 commit 数 | 12 |
-| 实现阶段 task 完成数 | 4/18（Task 0, 1, 2, 3） |
+| 总 commit 数 | 14 |
+| 实现阶段 task 完成数 | 5/18（Task 0, 1, 2, 3, 4） |
 | brainstorming 提问轮次 | 6（维度/供应商/架构/工具/护栏/记忆） |
 | 设计迭代轮次 | 3（工具集/护栏范围/记忆深度） |
 | AI 建议采纳 | 4（OpenAI格式/三层记忆/Arc/CompletionResponse位置） |

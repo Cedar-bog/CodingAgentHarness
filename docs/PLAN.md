@@ -782,7 +782,7 @@ git commit -m "feat: add OpenAI-compatible LLM provider for DeepSeek"
 - Consumes: `Message`, `ToolCall`, `ToolResult`, `ToolSchema`, `FunctionSchema` from `harness-core`
 - Produces: `Tool` trait, `ToolRegistry`, `ToolInfo`
 
-- [ ] **Step 1: Create harness-tools crate**
+- [x] **Step 1: Create harness-tools crate**
 
 Create `crates/harness-tools/Cargo.toml`:
 
@@ -803,7 +803,7 @@ tokio = { workspace = true }
 tokio = { workspace = true, features = ["test-util"] }
 ```
 
-- [ ] **Step 2: Write failing tests for ToolRegistry**
+- [x] **Step 2: Write failing tests for ToolRegistry**
 
 Create `crates/harness-tools/src/registry_tests.rs`:
 
@@ -884,12 +884,12 @@ async fn execute_unknown_tool_returns_error() {
 }
 ```
 
-- [ ] **Step 3: Run test to verify it fails**
+- [x] **Step 3: Run test to verify it fails**
 
 Run: `cargo test -p harness-tools`
 Expected: FAIL — `lib.rs` has no types yet
 
-- [ ] **Step 4: Implement Tool trait and ToolRegistry**
+- [x] **Step 4: Implement Tool trait and ToolRegistry**
 
 Create `crates/harness-tools/src/lib.rs`:
 
