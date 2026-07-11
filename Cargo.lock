@@ -110,6 +110,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "coding-agent-harness"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "harness-config",
+ "harness-core",
+ "harness-feedback",
+ "harness-guard",
+ "harness-llm",
+ "harness-memory",
+ "harness-tools",
+ "serde_json",
+ "tokio",
+ "toml",
+]
+
+[[package]]
 name = "core-foundation"
 version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
