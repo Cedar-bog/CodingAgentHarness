@@ -83,3 +83,40 @@ async fn execute_unknown_tool_returns_error() {
     let registry = ToolRegistry::new();
     assert!(registry.execute("nonexistent", &json!({})).await.is_err());
 }
+
+// --- ReadFile tests ---
+#[tokio::test]
+async fn read_file_tool_reads_content() {
+    let tool = crate::read_file::ReadFile::new();
+    let result = tool.execute(serde_json::json!({"path": "crates/harness-core/Cargo.toml"})).await;
+    assert!(!result.is_error);
+    assert!(result.content.contains("[package]"));
+}
+
+#[tokio::test]
+async fn read_file_tool_returns_error_for_missing() {
+    let tool = crate::read_file::ReadFile::new();
+    let result = tool.execute(serde_json::json!({"path": "nonexistent.txt"})).await;
+    assert!(result.is_error);
+}
+
+// --- WriteFile tests ---
+#[tokio::test]
+async fn write_file_tool_creates_file() {
+    let tool = crate::write_file::WriteFile::new();
+    let test_path = "test_output_write.txt";
+    let result = tool.execute(serde_json::json!({"path": test_path, "content": "hello world"})).await;
+    assert!(!result.is_error);
+    assert_eq!(std::fs::read_to_string(test_path).unwrap(), "hello world");
+    std::fs::remove_file(test_path).ok();
+}
+
+#[tokio::test]
+async fn write_file_tool_creates_parent_dirs() {
+    let tool = crate::write_file::WriteFile::new();
+    let test_path = "test_dir_nested/output.txt";
+    let result = tool.execute(serde_json::json!({"path": test_path, "content": "nested"})).await;
+    assert!(!result.is_error);
+    assert_eq!(std::fs::read_to_string(test_path).unwrap(), "nested");
+    std::fs::remove_dir_all("test_dir_nested").ok();
+}
