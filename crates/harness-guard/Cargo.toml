@@ -1,0 +1,9 @@
+[package]
+name = "harness-guard"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+harness-core = { path = "../harness-core" }
+regex = "1"
+serde_json = { workspace = true }
