@@ -7,3 +7,8 @@ edition = "2024"
 harness-core = { path = "../harness-core" }
 regex = "1"
 serde_json = { workspace = true }
+async-trait = { workspace = true }
+tokio = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["test-util"] }

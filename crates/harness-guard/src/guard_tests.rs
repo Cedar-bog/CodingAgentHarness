@@ -67,3 +67,20 @@ fn allows_read_file() {
     };
     assert!(matches!(g.check(&action), GuardrailAction::Allow));
 }
+
+// --- HITL tests ---
+use crate::hitl::{HitlConfirmer, MockHitlConfirmer};
+
+#[tokio::test]
+async fn mock_hitl_returns_approval() {
+    let hitl = MockHitlConfirmer::new(true);
+    let action = crate::GuardrailAction::Block { reason: "test".into() };
+    assert!(hitl.confirm(&action).await.unwrap());
+}
+
+#[tokio::test]
+async fn mock_hitl_returns_deny() {
+    let hitl = MockHitlConfirmer::new(false);
+    let action = crate::GuardrailAction::Block { reason: "test".into() };
+    assert!(!hitl.confirm(&action).await.unwrap());
+}
