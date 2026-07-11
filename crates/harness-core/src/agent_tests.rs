@@ -1,5 +1,4 @@
 use crate::agent::*;
-use crate::types::*;
 
 #[test]
 fn agent_stops_on_finish_stop() {
