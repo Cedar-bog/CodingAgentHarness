@@ -8,15 +8,26 @@ use harness_tools::shell_exec::ShellExec;
 use harness_tools::git_op::GitOp;
 use harness_tools::code_search::CodeSearch;
 use harness_guard::Guardrail;
-use harness_guard::hitl::StdioHitlConfirmer;
+use harness_guard::hitl::{StdioHitlConfirmer, HitlConfirmer};
 use harness_feedback::FeedbackValidator;
 use harness_memory::MemoryStore;
 use harness_config::HarnessConfig;
+use clap::Parser;
+
+#[derive(clap::Parser)]
+struct Cli {
+    /// Task description
+    task: String,
+    /// Path to config file
+    #[arg(short, long, default_value = "harness.toml")]
+    config: String,
+}
 
 #[tokio::main]
 async fn main() -> Result<()> {
     dotenv::dotenv().ok();
-    let config_str = std::fs::read_to_string("harness.toml").unwrap_or_default();
+    let cli = Cli::parse();
+    let config_str = std::fs::read_to_string(&cli.config).unwrap_or_default();
     let config: HarnessConfig = toml::from_str(&config_str).unwrap_or_default();
 
     let api_key = std::env::var(&config.llm.api_key_env).unwrap_or_default();
@@ -49,10 +60,7 @@ async fn main() -> Result<()> {
         max_tools_per_turn: config.agent.max_tools_per_turn,
     });
 
-    let task = std::env::args().nth(1).unwrap_or_else(|| {
-        eprintln!("Usage: harness <task>");
-        std::process::exit(1);
-    });
+    let task = cli.task;
 
     agent.add_user_message(&task);
 

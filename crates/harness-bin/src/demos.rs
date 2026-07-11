@@ -19,6 +19,9 @@ pub fn demo_guardrail_blocks() {
             println!("[DEMO 1] Guardrail BLOCKED: {}", reason);
             println!("[DEMO 1] Result: Action was intercepted as expected");
         }
+        harness_guard::GuardrailAction::RequireApproval { reason } => {
+            println!("[DEMO 1] Guardrail REQUIRES APPROVAL: {}", reason);
+        }
         harness_guard::GuardrailAction::Allow => {
             println!("[DEMO 1] FAIL: Action was allowed (should have been blocked)");
         }
