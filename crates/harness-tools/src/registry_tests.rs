@@ -1,4 +1,4 @@
-use crate::{Tool, ToolRegistry, ToolInfo};
+use crate::{Tool, ToolRegistry};
 use async_trait::async_trait;
 use harness_core::ToolResult;
 use serde_json::json;
@@ -88,8 +88,8 @@ async fn execute_unknown_tool_returns_error() {
 #[tokio::test]
 async fn read_file_tool_reads_content() {
     let tool = crate::read_file::ReadFile::new();
-    let result = tool.execute(serde_json::json!({"path": "crates/harness-core/Cargo.toml"})).await;
-    assert!(!result.is_error);
+    let result = tool.execute(serde_json::json!({"path": "../harness-core/Cargo.toml"})).await;
+    assert!(!result.is_error, "Failed: {:?}", result.content);
     assert!(result.content.contains("[package]"));
 }
 
