@@ -55,8 +55,7 @@ impl ToolRegistry {
         self.tools
             .values()
             .map(|t| ToolSchema {
-                name: t.name().to_string(),
-                description: t.description().to_string(),
+                schema_type: "function".into(),
                 function: FunctionSchema {
                     name: t.name().to_string(),
                     description: t.description().to_string(),
