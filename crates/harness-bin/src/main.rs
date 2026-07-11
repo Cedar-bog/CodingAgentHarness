@@ -8,6 +8,7 @@ use harness_tools::shell_exec::ShellExec;
 use harness_tools::git_op::GitOp;
 use harness_tools::code_search::CodeSearch;
 use harness_guard::Guardrail;
+use harness_guard::hitl::StdioHitlConfirmer;
 use harness_feedback::FeedbackValidator;
 use harness_memory::MemoryStore;
 use harness_config::HarnessConfig;
@@ -38,6 +39,7 @@ async fn main() -> Result<()> {
     tools.register(Box::new(CodeSearch::new()));
 
     let guardrail = Guardrail::new_default();
+    let hitl = StdioHitlConfirmer;
     let feedback = FeedbackValidator::new_default();
     let _memory = MemoryStore::new(&config.memory.db_path)
         .unwrap_or_else(|_| MemoryStore::new_in_memory().unwrap());
@@ -80,11 +82,63 @@ async fn main() -> Result<()> {
                         match guardrail.check(&tool_action) {
                             harness_guard::GuardrailAction::Block { reason } => {
                                 eprintln!("[GUARD] Blocked: {}", reason);
-                                agent.add_tool_result(ToolResult {
-                                    tool_call_id: tc.id.clone(),
-                                    content: format!("BLOCKED by guardrail: {}", reason),
-                                    is_error: true,
-                                });
+                                let action = harness_guard::GuardrailAction::Block { reason: reason.clone() };
+                                if hitl.confirm(&action).await.unwrap_or(false) {
+                                    // HITL approved — execute anyway
+                                    let args: serde_json::Value = serde_json::from_str(&tc.arguments).unwrap_or(serde_json::Value::Null);
+                                    match tools.execute(&tc.name, &args).await {
+                                        Ok(mut result) => {
+                                            result.tool_call_id = tc.id.clone();
+                                            let fb = feedback.validate(&result);
+                                            if !fb.is_success {
+                                                eprintln!("[FEEDBACK] {}", fb.summary);
+                                            }
+                                            agent.add_tool_result(result);
+                                        }
+                                        Err(e) => {
+                                            agent.add_tool_result(ToolResult {
+                                                tool_call_id: tc.id.clone(),
+                                                content: format!("Tool error: {}", e),
+                                                is_error: true,
+                                            });
+                                        }
+                                    }
+                                } else {
+                                    agent.add_tool_result(ToolResult {
+                                        tool_call_id: tc.id.clone(),
+                                        content: format!("BLOCKED by guardrail: {}", reason),
+                                        is_error: true,
+                                    });
+                                }
+                            }
+                            harness_guard::GuardrailAction::RequireApproval { reason } => {
+                                let action = harness_guard::GuardrailAction::RequireApproval { reason: reason.clone() };
+                                if hitl.confirm(&action).await.unwrap_or(false) {
+                                    let args: serde_json::Value = serde_json::from_str(&tc.arguments).unwrap_or(serde_json::Value::Null);
+                                    match tools.execute(&tc.name, &args).await {
+                                        Ok(mut result) => {
+                                            result.tool_call_id = tc.id.clone();
+                                            let fb = feedback.validate(&result);
+                                            if !fb.is_success {
+                                                eprintln!("[FEEDBACK] {}", fb.summary);
+                                            }
+                                            agent.add_tool_result(result);
+                                        }
+                                        Err(e) => {
+                                            agent.add_tool_result(ToolResult {
+                                                tool_call_id: tc.id.clone(),
+                                                content: format!("Tool error: {}", e),
+                                                is_error: true,
+                                            });
+                                        }
+                                    }
+                                } else {
+                                    agent.add_tool_result(ToolResult {
+                                        tool_call_id: tc.id.clone(),
+                                        content: format!("BLOCKED by guardrail: {}", reason),
+                                        is_error: true,
+                                    });
+                                }
                             }
                             harness_guard::GuardrailAction::Allow => {
                                 let args: serde_json::Value = serde_json::from_str(&tc.arguments).unwrap_or(serde_json::Value::Null);

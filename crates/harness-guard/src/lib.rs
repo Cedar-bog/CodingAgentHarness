@@ -6,6 +6,7 @@ use harness_core::ToolCall;
 #[derive(Debug, Clone, PartialEq)]
 pub enum GuardrailAction {
     Allow,
+    RequireApproval { reason: String },
     Block { reason: String },
 }
 
