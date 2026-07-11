@@ -168,3 +168,79 @@ OpenCode 提出了三种方案：
 3. **假设："spec 和 plan 可以线性生成"**
    - 现实：plan 的 self-review 发现了 spec 中的架构问题（类型依赖方向），需要回头修改 spec。
    - 反思：spec 和 plan 应该交替迭代，而非严格串行。
+
+---
+
+## 七、冷启动验证（Stranger Agent 视角）
+
+> 以下记录由"陌生智能体"（OpenCode, big-pickle 模型）完成。该 agent 未参与 brainstorming，仅凭 SPEC.md + PLAN.md 尝试实现 Task 1 和 Task 2。
+
+### 7.1 执行概况
+
+- **选取任务**：Task 1（Cargo Workspace + Shared Types）和 Task 2（LLM Abstraction Layer + Mock Provider）
+- **执行耗时**：约 15 分钟（不含环境修复时间）
+- **最终结果**：Task 1 和 Task 2 均成功完成，所有测试通过
+
+### 7.2 顺利的部分
+
+1. **文件结构清晰**：PLAN.md 精确到每个文件的路径和内容，直接复制即可。`crates/harness-core/src/types.rs`、`error.rs`、`lib.rs` 的结构无需额外思考。
+2. **类型定义完整**：`Message`、`ToolCall`、`ToolResult`、`CompletionResponse` 等类型的字段和 derive 宏都在 PLAN 中给出了完整代码，直接使用。
+3. **测试用例明确**：Task 2 的 mock 测试给出了完整的测试代码，包括断言和预期行为。
+
+### 7.3 遇到的问题与 spec 缺陷
+
+#### 问题 1：`MockLlmProvider` 的 `responses` 字段需要 interior mutability
+
+**PLAN 中的代码**：
+```rust
+pub struct MockLlmProvider {
+    responses: VecDeque<CompletionResponse>,
+    call_log: Arc<Mutex<Vec<CompletionRequest>>>,
+}
+
+impl LlmProvider for MockLlmProvider {
+    async fn complete(&self, ...) -> ... {
+        self.responses.pop_front()  // 编译错误：&self 不能可变借用
+    }
+}
+```
+
+**问题**：`pop_front()` 需要 `&mut self`，但 `complete()` 的签名是 `&self`。PLAN 中只对 `call_log` 使用了 `Arc<Mutex<>>`，遗漏了 `responses`。
+
+**修复**：将 `responses` 也改为 `Arc<Mutex<VecDeque<...>>>`。
+
+**判断**：这是 PLAN 中的**代码错误**，不是 spec 缺陷。PLAN 直接给出了代码但代码本身无法编译。陌生 agent 需要具备 Rust 所有权知识才能修复。
+
+#### 问题 2：测试中的 `catch_unwind` 在 async 上下文不可用
+
+**PLAN 中的测试代码**：
+```rust
+#[tokio::test]
+async fn mock_panics_when_no_responses_left() {
+    let mock = MockLlmProvider::new(vec![]);
+    let result = std::panic::AssertUnwindSafe(mock.complete(req));
+    assert!(result.catch_unwind().await.is_err());
+}
+```
+
+**问题**：`AssertUnwindSafe` 的 `.catch_unwind()` 方法来自 `futures::FutureExt`，不在标准库中。且 `complete()` 返回 `Result`，不会 panic。
+
+**修复**：改为直接断言 `result.is_err()`，更符合实际行为（返回错误而非 panic）。
+
+**判断**：PLAN 中的测试代码**与实现不一致**——实现返回 `Err` 而非 panic。
+
+### 7.4 对 SPEC/PLAN 的修订建议
+
+| 位置 | 问题 | 建议 |
+|------|------|------|
+| PLAN Task 2 `mock.rs` | `responses` 缺少 `Arc<Mutex<>>` | 改为与 `call_log` 一致的 interior mutability 模式 |
+| PLAN Task 2 `mock_tests.rs` | `catch_unwind` 测试与实现行为不匹配 | 改为 `assert!(result.is_err())` |
+| SPEC §3.3 | `LlmProvider` trait 的 `complete()` 方法签名未在 spec 中给出 | 建议在 spec 中补充 trait 签名，避免 plan 阶段遗漏 |
+
+### 7.5 总体评价
+
+**SPEC 质量**：高。问题陈述、用户故事、功能规约、数据模型、架构图都非常清晰，陌生 agent 无需额外上下文即可理解项目目标。
+
+**PLAN 质量**：中高。文件结构和接口定义精确，但两处代码错误需要 agent 自行修复。对于有 Rust 经验的 agent 来说，这些是小问题；但对于不熟悉 interior mutability 的 agent，可能会卡住。
+
+**最关键的发现**：PLAN 中直接给出的代码不能编译，说明"代码即规约"的方式存在风险——规约本身可能有 bug。建议 PLAN 中的代码标注为"伪代码/示意"，或在关键步骤增加编译验证。
