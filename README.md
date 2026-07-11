@@ -4,32 +4,55 @@
 
 ## 快速开始
 
+### 前置要求
+
+- Rust 1.78+
+- DeepSeek API key（或其他兼容 OpenAI 格式的 API）
+
+### 配置密钥
+
+创建 `.env` 文件（或复制 `.env.example`）：
+
+```bash
+echo "DEEPSEEK_API_KEY=sk-你的密钥" > .env
+```
+
+### 运行
+
+```bash
+# 运行智能体
+cargo run -p coding-agent-harness -- "你的任务描述"
+
+# 或编译后运行
+cargo build --release
+./target/release/harness "你的任务描述"
+```
+
+### 运行演示（无需 API key）
+
+```bash
+cargo run --bin demo
+```
+
 ### Docker
 
 ```bash
 docker build -t coding-agent-harness .
-docker run -it -e DEEPSEEK_API_KEY=xxx -v $(pwd):/workspace coding-agent-harness "你的任务描述"
-```
-
-### 本地运行
-
-```bash
-cargo build --release
-export DEEPSEEK_API_KEY=你的密钥
-./target/release/harness "你的任务描述"
+docker run -it -e DEEPSEEK_API_KEY=sk-你的密钥 -v $(pwd):/workspace coding-agent-harness "你的任务描述"
 ```
 
 ## 配置
 
-复制 `harness.toml` 并根据需要编辑。所有配置项均有默认值。
+编辑 `harness.toml` 可调整所有参数，包括 LLM 供应商、模型、温度、最大轮次等。
+
+默认模型：`deepseek-v4-flash`（可在 `harness.toml` 中修改）。
 
 ## 密钥管理
 
-```bash
-export DEEPSEEK_API_KEY=你的密钥
-```
-
-密钥优先级：环境变量 > OS 钥匙串 > 配置文件。
+密钥按以下优先级读取：
+1. 环境变量 `DEEPSEEK_API_KEY`
+2. `.env` 文件（自动加载，UTF-8 编码）
+3. 配置文件中的 `api_key_env` 字段
 
 ## 架构
 
