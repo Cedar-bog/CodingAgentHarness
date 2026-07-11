@@ -14,6 +14,7 @@ use harness_config::HarnessConfig;
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    dotenv::dotenv().ok();
     let config_str = std::fs::read_to_string("harness.toml").unwrap_or_default();
     let config: HarnessConfig = toml::from_str(&config_str).unwrap_or_default();
 
