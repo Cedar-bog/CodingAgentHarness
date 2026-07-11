@@ -153,14 +153,23 @@
 - **合并**: `feat/task-5-read-write-tools` → `master`
 - **人工干预**: 无
 
+### 017 | Task 6: ShellExec + GitOp + CodeSearch Tools
+- **时间**: Task 5 完成后
+- **操作**: 创建分支 `feat/task-6-shell-git-search`，分 RED/GREEN
+- **RED**: commit `9949ee2` → CI #30 failure ✅
+- **GREEN**: commit `2643fdb` → CI #31 success ✅
+- **产出**: 3 个工具（ShellExec/GitOp/CodeSearch），13 tests
+- **合并**: `feat/task-6-shell-git-search` → `master`
+- **人工干预**: 无
+
 ---
 
 ## 统计
 
 | 指标 | 值 |
 |------|-----|
-| 总 commit 数 | 16 |
-| 实现阶段 task 完成数 | 6/18（Task 0, 1, 2, 3, 4, 5） |
+| 总 commit 数 | 18 |
+| 实现阶段 task 完成数 | 7/18（Task 0, 1, 2, 3, 4, 5, 6） |
 | brainstorming 提问轮次 | 6（维度/供应商/架构/工具/护栏/记忆） |
 | 设计迭代轮次 | 3（工具集/护栏范围/记忆深度） |
 | AI 建议采纳 | 4（OpenAI格式/三层记忆/Arc/CompletionResponse位置） |
