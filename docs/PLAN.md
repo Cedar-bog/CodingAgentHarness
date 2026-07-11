@@ -135,7 +135,7 @@ Create PR from `feat/ci-setup` → `master`. CI must show `unit-test` job passin
 - Consumes: none (foundation)
 - Produces: `Message`, `Role`, `ToolCall`, `ToolResult`, `Action`, `HarnessError` used by all crates
 
-- [ ] **Step 1: Convert root Cargo.toml to workspace**
+- [x] **Step 1: Convert root Cargo.toml to workspace**
 
 Replace contents of `Cargo.toml`:
 
@@ -152,7 +152,7 @@ async-trait = "0.1"
 thiserror = "2"
 ```
 
-- [ ] **Step 2: Create harness-core crate structure**
+- [x] **Step 2: Create harness-core crate structure**
 
 Create directory `crates/harness-core/src/`.
 
@@ -170,7 +170,7 @@ serde_json = { workspace = true }
 thiserror = { workspace = true }
 ```
 
-- [ ] **Step 3: Write shared types**
+- [x] **Step 3: Write shared types**
 
 Create `crates/harness-core/src/types.rs`:
 
@@ -254,7 +254,7 @@ pub struct FunctionSchema {
 }
 ```
 
-- [ ] **Step 4: Write error types**
+- [x] **Step 4: Write error types**
 
 Create `crates/harness-core/src/error.rs`:
 
@@ -291,7 +291,7 @@ pub enum HarnessError {
 pub type Result<T> = std::result::Result<T, HarnessError>;
 ```
 
-- [ ] **Step 5: Write lib.rs re-exports**
+- [x] **Step 5: Write lib.rs re-exports**
 
 Create `crates/harness-core/src/lib.rs`:
 
@@ -303,16 +303,16 @@ pub use types::*;
 pub use error::*;
 ```
 
-- [ ] **Step 6: Delete old src/main.rs**
+- [x] **Step 6: Delete old src/main.rs**
 
 Remove `src/main.rs` (will be replaced by `crates/harness-bin/`).
 
-- [ ] **Step 7: Run tests to verify compilation**
+- [x] **Step 7: Run tests to verify compilation**
 
 Run: `cargo check --workspace`
 Expected: OK (no errors)
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add -A

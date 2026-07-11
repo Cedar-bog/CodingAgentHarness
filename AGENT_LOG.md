@@ -92,6 +92,22 @@
 - **CI 内容**: push/PR 触发 → checkout → Rust toolchain → cargo test --workspace
 - **分支**: `feat/ci-setup` → 合并到 master
 - **commit**: `1aa8f79` — `ci: add GitHub Actions workflow with unit-test job`
+- **CI 验证**: 通过（仓库已公开，可直接查看 Actions 页面）
+- **人工干预**: 无
+
+### 012 | Task 1: Workspace + Shared Types
+- **时间**: Task 0 完成后
+- **触发技能**: subagent-driven-development, using-git-worktrees
+- **操作**: 创建分支 `feat/task-1-workspace-types`，派发 subagent 实现
+- **subagent**: general-purpose agent
+- **结果**: DONE
+- **产出**:
+  - 根 `Cargo.toml` 转为 workspace
+  - `harness-core` crate：`types.rs`（10个共享类型）+ `error.rs`（HarnessError + Result）
+  - `src/main.rs` 已删除
+- **CI 验证**: 分支推送 CI 通过（33s），合并后 master CI 通过（31s）
+- **commit**: `c6b7706` — `feat: convert to cargo workspace, add shared types and error types`
+- **合并**: `feat/task-1-workspace-types` → `master`（`--no-ff`）
 - **人工干预**: 无
 
 ---
@@ -100,8 +116,8 @@
 
 | 指标 | 值 |
 |------|-----|
-| 总 commit 数 | 7 |
-| 实现阶段 task 完成数 | 1/18（Task 0） |
+| 总 commit 数 | 8 |
+| 实现阶段 task 完成数 | 2/18（Task 0, Task 1） |
 | brainstorming 提问轮次 | 6（维度/供应商/架构/工具/护栏/记忆） |
 | 设计迭代轮次 | 3（工具集/护栏范围/记忆深度） |
 | AI 建议采纳 | 4（OpenAI格式/三层记忆/Arc/CompletionResponse位置） |
