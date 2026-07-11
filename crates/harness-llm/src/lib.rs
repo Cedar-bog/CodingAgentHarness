@@ -1,4 +1,5 @@
 pub mod mock;
+pub mod openai;
 
 #[cfg(test)]
 mod mock_tests;
