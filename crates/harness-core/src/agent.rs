@@ -1,5 +1,4 @@
 use crate::types::*;
-use crate::error::Result;
 
 pub struct Agent {
     pub config: AgentConfig,

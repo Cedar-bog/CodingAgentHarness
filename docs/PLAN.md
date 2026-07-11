@@ -116,7 +116,7 @@ git push -u origin feat/ci-setup
 
 - [x] **Step 5: Create PR and verify CI passes**
 
-Create PR from `feat/ci-setup` â†’ `master`. CI must show `unit-test` job passing.
+Create PR from `feat/ci-setup` â†?`master`. CI must show `unit-test` job passing.
 
 - [x] **Step 6: Merge PR**
 
@@ -438,7 +438,7 @@ async fn mock_returns_error_when_no_responses_left() {
 - [x] **Step 3: Run test to verify it fails**
 
 Run: `cargo test -p harness-llm`
-Expected: FAIL â€” `mock.rs` does not exist yet
+Expected: FAIL â€?`mock.rs` does not exist yet
 
 - [x] **Step 4: Write LlmProvider trait and MockLlmProvider**
 
@@ -608,7 +608,7 @@ fn provider_name_and_metadata() {
 - [x] **Step 2: Run test to verify it fails**
 
 Run: `cargo test -p harness-llm -- openai`
-Expected: FAIL â€” `openai.rs` does not exist
+Expected: FAIL â€?`openai.rs` does not exist
 
 - [x] **Step 3: Implement OpenAiCompatibleProvider**
 
@@ -887,7 +887,7 @@ async fn execute_unknown_tool_returns_error() {
 - [x] **Step 3: Run test to verify it fails**
 
 Run: `cargo test -p harness-tools`
-Expected: FAIL â€” `lib.rs` has no types yet
+Expected: FAIL â€?`lib.rs` has no types yet
 
 - [x] **Step 4: Implement Tool trait and ToolRegistry**
 
@@ -972,7 +972,7 @@ impl ToolRegistry {
 mod registry_tests;
 ```
 
-Note: The `execute` method needs adjustment â€” `Box<dyn Tool>` can't be cloned. Fix:
+Note: The `execute` method needs adjustment â€?`Box<dyn Tool>` can't be cloned. Fix:
 
 ```rust
     pub async fn execute(&self, name: &str, args: &serde_json::Value) -> Result<ToolResult, String> {
@@ -985,7 +985,7 @@ Note: The `execute` method needs adjustment â€” `Box<dyn Tool>` can't be cloned.
     }
 ```
 
-Actually, let's fix the design upfront â€” use `Arc<dyn Tool>`:
+Actually, let's fix the design upfront â€?use `Arc<dyn Tool>`:
 
 Update `crates/harness-tools/src/lib.rs`:
 
@@ -1070,15 +1070,15 @@ Update tests to use `Arc`:
 ```rust
 use std::sync::Arc;
 // ...
-    registry.register(Box::new(DummyTool));  â†’  registry.register(Arc::new(DummyTool));
+    registry.register(Box::new(DummyTool));  â†? registry.register(Arc::new(DummyTool));
 ```
 
-- [ ] **Step 5: Run tests to verify they pass**
+- [x] **Step 5: Run tests to verify they pass**
 
 Run: `cargo test -p harness-tools`
 Expected: 5 tests PASS
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add crates/harness-tools/
@@ -1275,7 +1275,7 @@ impl Tool for WriteFile {
 
 - [x] **Step 7: Update lib.rs to include new modules**
 
-Update `crates/harness-tools/src/lib.rs` â€” add at top:
+Update `crates/harness-tools/src/lib.rs` â€?add at top:
 
 ```rust
 pub mod read_file;
@@ -1307,7 +1307,7 @@ git commit -m "feat: add ReadFile and WriteFile tools"
 - Consumes: `Tool` trait from Task 4
 - Produces: `ShellExec`, `GitOp`, `CodeSearch` tools
 
-- [ ] **Step 1: Write failing test for ShellExec**
+- [x] **Step 1: Write failing test for ShellExec**
 
 Add to `crates/harness-tools/src/registry_tests.rs`:
 
@@ -1330,7 +1330,7 @@ async fn shell_exec_returns_error_for_bad_command() {
 }
 ```
 
-- [ ] **Step 2: Implement ShellExec**
+- [x] **Step 2: Implement ShellExec**
 
 Create `crates/harness-tools/src/shell_exec.rs`:
 
@@ -1402,12 +1402,12 @@ impl Tool for ShellExec {
 }
 ```
 
-- [ ] **Step 3: Run ShellExec tests**
+- [x] **Step 3: Run ShellExec tests**
 
 Run: `cargo test -p harness-tools -- shell_exec`
 Expected: 2 tests PASS
 
-- [ ] **Step 4: Write failing test for GitOp**
+- [x] **Step 4: Write failing test for GitOp**
 
 Add to `crates/harness-tools/src/registry_tests.rs`:
 
@@ -1422,7 +1422,7 @@ async fn git_op_status_works() {
 }
 ```
 
-- [ ] **Step 5: Implement GitOp**
+- [x] **Step 5: Implement GitOp**
 
 Create `crates/harness-tools/src/git_op.rs`:
 
@@ -1482,7 +1482,7 @@ impl Tool for GitOp {
 }
 ```
 
-- [ ] **Step 6: Write failing test for CodeSearch**
+- [x] **Step 6: Write failing test for CodeSearch**
 
 Add to `crates/harness-tools/src/registry_tests.rs`:
 
@@ -1498,7 +1498,7 @@ async fn code_search_finds_pattern() {
 }
 ```
 
-- [ ] **Step 7: Implement CodeSearch**
+- [x] **Step 7: Implement CodeSearch**
 
 Create `crates/harness-tools/src/code_search.rs`:
 
@@ -1578,12 +1578,12 @@ fn glob_match(pattern: &str, name: &str) -> bool {
 }
 ```
 
-- [ ] **Step 8: Run all tools tests**
+- [x] **Step 8: Run all tools tests**
 
 Run: `cargo test -p harness-tools`
 Expected: All tests PASS
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add crates/harness-tools/
@@ -1602,7 +1602,7 @@ git commit -m "feat: add ShellExec, GitOp, and CodeSearch tools"
 - Consumes: `Tool` trait, `ToolRegistry` from Task 4
 - Produces: `Plugin` trait, `PluginLoader`
 
-- [ ] **Step 1: Write failing test for PluginLoader**
+- [x] **Step 1: Write failing test for PluginLoader**
 
 Add to `crates/harness-tools/src/registry_tests.rs`:
 
@@ -1647,7 +1647,7 @@ async fn plugin_loader_loads_into_registry() {
 }
 ```
 
-- [ ] **Step 2: Implement Plugin trait and PluginLoader**
+- [x] **Step 2: Implement Plugin trait and PluginLoader**
 
 Create `crates/harness-tools/src/plugin.rs`:
 
@@ -1693,16 +1693,16 @@ impl PluginLoader {
 }
 ```
 
-- [ ] **Step 3: Update lib.rs**
+- [x] **Step 3: Update lib.rs**
 
-Update `crates/harness-tools/src/lib.rs` â€” add `pub mod plugin;` at top.
+Update `crates/harness-tools/src/lib.rs` â€?add `pub mod plugin;` at top.
 
-- [ ] **Step 4: Run tests**
+- [x] **Step 4: Run tests**
 
 Run: `cargo test -p harness-tools`
 Expected: All tests PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add crates/harness-tools/
@@ -1723,7 +1723,7 @@ git commit -m "feat: add Plugin trait and PluginLoader"
 - Consumes: `ToolCall` from `harness-core`
 - Produces: `Guardrail`, `GuardrailRule` trait, 5 built-in rules
 
-- [ ] **Step 1: Create harness-guard crate**
+- [x] **Step 1: Create harness-guard crate**
 
 Create `crates/harness-guard/Cargo.toml`:
 
@@ -1739,7 +1739,7 @@ regex = "1"
 serde_json = { workspace = true }
 ```
 
-- [ ] **Step 2: Write failing tests for guardrail rules**
+- [x] **Step 2: Write failing tests for guardrail rules**
 
 Create `crates/harness-guard/src/guard_tests.rs`:
 
@@ -1790,7 +1790,7 @@ allows_read_file() {
 }
 ```
 
-- [ ] **Step 3: Implement Guardrail and rules**
+- [x] **Step 3: Implement Guardrail and rules**
 
 Create `crates/harness-guard/src/lib.rs`:
 
@@ -1937,12 +1937,12 @@ impl GuardrailRule for CredentialLeakRule {
 }
 ```
 
-- [ ] **Step 4: Run tests**
+- [x] **Step 4: Run tests**
 
 Run: `cargo test -p harness-guard`
 Expected: 6 tests PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add crates/harness-guard/
@@ -1961,7 +1961,7 @@ git commit -m "feat: add guardrail system with 5 built-in rules"
 - Consumes: `GuardrailAction` from Task 8
 - Produces: `HitlConfirmer` trait, `StdioHitlConfirmer`
 
-- [ ] **Step 1: Write failing test for HITL confirmer**
+- [x] **Step 1: Write failing test for HITL confirmer**
 
 Add to `crates/harness-guard/src/guard_tests.rs`:
 
@@ -1984,7 +1984,7 @@ async fn mock_hitl_returns_deny() {
 }
 ```
 
-- [ ] **Step 2: Implement HITL**
+- [x] **Step 2: Implement HITL**
 
 Create `crates/harness-guard/src/hitl.rs`:
 
@@ -2030,18 +2030,18 @@ impl HitlConfirmer for StdioHitlConfirmer {
 }
 ```
 
-Update `crates/harness-guard/src/lib.rs` â€” add:
+Update `crates/harness-guard/src/lib.rs` â€?add:
 
 ```rust
 pub mod hitl;
 ```
 
-- [ ] **Step 3: Run tests**
+- [x] **Step 3: Run tests**
 
 Run: `cargo test -p harness-guard`
 Expected: 8 tests PASS
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add crates/harness-guard/
@@ -2062,7 +2062,7 @@ git commit -m "feat: add HITL confirmer with mock and stdio implementations"
 - Consumes: `ToolResult` from `harness-core`
 - Produces: `FeedbackValidator`, `ValidationRule` trait, 3 validators
 
-- [ ] **Step 1: Create harness-feedback crate**
+- [x] **Step 1: Create harness-feedback crate**
 
 Create `crates/harness-feedback/Cargo.toml`:
 
@@ -2077,7 +2077,7 @@ harness-core = { path = "../harness-core" }
 regex = "1"
 ```
 
-- [ ] **Step 2: Write failing tests**
+- [x] **Step 2: Write failing tests**
 
 Create `crates/harness-feedback/src/feedback_tests.rs`:
 
@@ -2131,7 +2131,7 @@ feedback_validator_dispatches_to_correct_rule() {
 }
 ```
 
-- [ ] **Step 3: Implement validators**
+- [x] **Step 3: Implement validators**
 
 Create `crates/harness-feedback/src/lib.rs`:
 
@@ -2281,12 +2281,12 @@ impl ValidationRule for LintResultValidator {
 }
 ```
 
-- [ ] **Step 4: Run tests**
+- [x] **Step 4: Run tests**
 
 Run: `cargo test -p harness-feedback`
 Expected: 5 tests PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add crates/harness-feedback/
@@ -2307,7 +2307,7 @@ git commit -m "feat: add feedback validators for test, compile, and lint results
 - Consumes: none (standalone storage)
 - Produces: `MemoryStore`, `MemoryEntry`
 
-- [ ] **Step 1: Create harness-memory crate**
+- [x] **Step 1: Create harness-memory crate**
 
 Create `crates/harness-memory/Cargo.toml`:
 
@@ -2325,7 +2325,7 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 ```
 
-- [ ] **Step 2: Write failing tests**
+- [x] **Step 2: Write failing tests**
 
 Create `crates/harness-memory/src/memory_tests.rs`:
 
@@ -2378,7 +2378,7 @@ by_category_filters() {
 }
 ```
 
-- [ ] **Step 3: Implement MemoryStore**
+- [x] **Step 3: Implement MemoryStore**
 
 Create `crates/harness-memory/src/lib.rs`:
 
@@ -2502,12 +2502,12 @@ impl MemoryStore {
 }
 ```
 
-- [ ] **Step 4: Run tests**
+- [x] **Step 4: Run tests**
 
 Run: `cargo test -p harness-memory`
 Expected: 4 tests PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add crates/harness-memory/
@@ -2527,7 +2527,7 @@ git commit -m "feat: add MemoryStore with SQLite backend and FTS5 search"
 - Consumes: none
 - Produces: `HarnessConfig` struct with all agent parameters
 
-- [ ] **Step 1: Create harness-config crate**
+- [x] **Step 1: Create harness-config crate**
 
 Create `crates/harness-config/Cargo.toml`:
 
@@ -2543,7 +2543,7 @@ toml = "0.8"
 harness-core = { path = "../harness-core" }
 ```
 
-- [ ] **Step 2: Write failing tests**
+- [x] **Step 2: Write failing tests**
 
 Create `crates/harness-config/src/config_tests.rs`:
 
@@ -2596,7 +2596,7 @@ provider = "deepseek"
 }
 ```
 
-- [ ] **Step 3: Implement HarnessConfig**
+- [x] **Step 3: Implement HarnessConfig**
 
 Create `crates/harness-config/src/lib.rs`:
 
@@ -2736,12 +2736,12 @@ fn default_allowed_tools() -> Vec<String> {
 mod config_tests;
 ```
 
-- [ ] **Step 4: Run tests**
+- [x] **Step 4: Run tests**
 
 Run: `cargo test -p harness-config`
 Expected: 2 tests PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add crates/harness-config/
@@ -2763,7 +2763,7 @@ git commit -m "feat: add TOML configuration with defaults"
 
 Note: Agent lives in `harness-core` which only owns shared types. The integration in `harness-bin` (Task 14) wires in concrete `LlmProvider`, `ToolRegistry`, `Guardrail`, etc. This keeps `harness-core` dependency-free.
 
-- [ ] **Step 1: Update harness-core Cargo.toml**
+- [x] **Step 1: Update harness-core Cargo.toml**
 
 Update `crates/harness-core/Cargo.toml`:
 
@@ -2780,7 +2780,7 @@ thiserror = { workspace = true }
 async-trait = { workspace = true }
 ```
 
-- [ ] **Step 2: Write failing tests for Agent loop**
+- [x] **Step 2: Write failing tests for Agent loop**
 
 Create `crates/harness-core/src/agent_tests.rs`:
 
@@ -2854,7 +2854,7 @@ parse_actions_returns_text_when_no_tool_calls() {
 }
 ```
 
-- [ ] **Step 3: Implement Agent struct**
+- [x] **Step 3: Implement Agent struct**
 
 Create `crates/harness-core/src/agent.rs`:
 
@@ -2932,7 +2932,7 @@ impl Agent {
 mod agent_tests;
 ```
 
-- [ ] **Step 4: Write meaningful Agent loop tests**
+- [x] **Step 4: Write meaningful Agent loop tests**
 
 Update `crates/harness-core/src/agent_tests.rs`:
 
@@ -3006,7 +3006,7 @@ parse_actions_returns_text_when_no_tool_calls() {
 }
 ```
 
-- [ ] **Step 5: Update lib.rs**
+- [x] **Step 5: Update lib.rs**
 
 Update `crates/harness-core/src/lib.rs`:
 
@@ -3023,12 +3023,12 @@ pub use agent::{Agent, AgentConfig};
 mod agent_tests;
 ```
 
-- [ ] **Step 6: Run tests**
+- [x] **Step 6: Run tests**
 
 Run: `cargo test -p harness-core`
 Expected: 5 tests PASS
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add crates/harness-core/
@@ -3037,7 +3037,7 @@ git commit -m "feat: add Agent main loop with state machine"
 
 ---
 
-### Task 14: Integration â€” Wire All Components Together
+### Task 14: Integration â€?Wire All Components Together
 
 **Files:**
 - Create: `crates/harness-bin/Cargo.toml`
@@ -3047,7 +3047,7 @@ git commit -m "feat: add Agent main loop with state machine"
 - Consumes: all crates (core, llm, tools, memory, guard, feedback, config)
 - Produces: `run_agent()` function that ties everything together
 
-- [ ] **Step 1: Create harness-bin crate**
+- [x] **Step 1: Create harness-bin crate**
 
 Create `crates/harness-bin/Cargo.toml`:
 
@@ -3074,7 +3074,7 @@ serde_json = { workspace = true }
 dotenv = "0.15"
 ```
 
-- [ ] **Step 2: Implement main.rs**
+- [x] **Step 2: Implement main.rs**
 
 Create `crates/harness-bin/src/main.rs`:
 
@@ -3203,17 +3203,17 @@ async fn main() -> Result<()> {
 }
 ```
 
-- [ ] **Step 3: Run cargo check**
+- [x] **Step 3: Run cargo check**
 
 Run: `cargo check --workspace`
 Expected: OK
 
-- [ ] **Step 4: Build the binary**
+- [x] **Step 4: Build the binary**
 
 Run: `cargo build -p coding-agent-harness`
 Expected: Binary at `target/debug/harness`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add crates/harness-bin/
@@ -3232,7 +3232,7 @@ git commit -m "feat: wire all components together in CLI binary"
 - Consumes: all crates (via harness-bin which depends on everything)
 - Produces: 3 deterministic demonstration functions
 
-- [ ] **Step 1: Create demo: guardrail blocks dangerous action**
+- [x] **Step 1: Create demo: guardrail blocks dangerous action**
 
 Add to `crates/harness-bin/src/demos.rs` (new file):
 
@@ -3308,12 +3308,12 @@ pub fn demo_plugin_extension() {
 }
 ```
 
-- [ ] **Step 2: Run demos**
+- [x] **Step 2: Run demos**
 
 Run: `cargo check -p coding-agent-harness`
 Expected: Compiles OK
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add crates/harness-bin/src/demos.rs
@@ -3335,7 +3335,7 @@ git commit -m "feat: add mechanism demonstration functions"
 - Consumes: compiled binary from Task 14
 - Produces: Docker image, documentation
 
-- [ ] **Step 1: Create Dockerfile**
+- [x] **Step 1: Create Dockerfile**
 
 Create `Dockerfile`:
 
@@ -3353,7 +3353,7 @@ WORKDIR /workspace
 ENTRYPOINT ["harness"]
 ```
 
-- [ ] **Step 2: Create default config**
+- [x] **Step 2: Create default config**
 
 Create `harness.toml`:
 
@@ -3383,7 +3383,7 @@ db_path = ".harness/memory.db"
 allowed = ["read_file", "write_file", "shell_exec", "git_op", "code_search"]
 ```
 
-- [ ] **Step 3: Create .env.example**
+- [x] **Step 3: Create .env.example**
 
 Create `.env.example`:
 
@@ -3391,7 +3391,7 @@ Create `.env.example`:
 DEEPSEEK_API_KEY=your-api-key-here
 ```
 
-- [ ] **Step 4: Update .gitignore**
+- [x] **Step 4: Update .gitignore**
 
 Append to `.gitignore`:
 
@@ -3402,7 +3402,7 @@ target/
 Cargo.lock
 ```
 
-- [ ] **Step 5: Create README.md**
+- [x] **Step 5: Create README.md**
 
 Create `README.md`:
 
@@ -3460,12 +3460,12 @@ cargo test --workspace
 All core mechanisms have mock-LLM deterministic unit tests.
 ```
 
-- [ ] **Step 6: Verify Docker build**
+- [x] **Step 6: Verify Docker build**
 
 Run: `docker build -t coding-agent-harness .`
 Expected: Image builds successfully
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add -A
@@ -3474,19 +3474,19 @@ git commit -m "feat: add Dockerfile, README, and default config"
 
 ---
 
-### Task 17: Final Verification â€” Run All Tests
+### Task 17: Final Verification â€?Run All Tests
 
-- [ ] **Step 1: Run full test suite**
+- [x] **Step 1: Run full test suite**
 
 Run: `cargo test --workspace`
 Expected: All tests PASS across all crates
 
-- [ ] **Step 2: Verify binary runs**
+- [x] **Step 2: Verify binary runs**
 
 Run: `cargo run -p coding-agent-harness -- --help` (or with a test task)
 Expected: Binary executes without crash
 
-- [ ] **Step 3: Final commit if any fixes needed**
+- [x] **Step 3: Final commit if any fixes needed**
 
 ```bash
 git add -A
