@@ -1,7 +1,11 @@
 pub mod mock;
+pub mod openai;
 
 #[cfg(test)]
 mod mock_tests;
+
+#[cfg(test)]
+mod openai_tests;
 
 use async_trait::async_trait;
 use harness_core::{CompletionResponse, Message, ToolSchema};
