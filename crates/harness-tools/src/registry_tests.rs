@@ -120,3 +120,36 @@ async fn write_file_tool_creates_parent_dirs() {
     assert_eq!(std::fs::read_to_string(test_path).unwrap(), "nested");
     std::fs::remove_dir_all("test_dir_nested").ok();
 }
+
+// --- ShellExec tests ---
+#[tokio::test]
+async fn shell_exec_runs_command() {
+    let tool = crate::shell_exec::ShellExec::new();
+    let result = tool.execute(serde_json::json!({"command": "echo hello"})).await;
+    assert!(!result.is_error);
+    assert!(result.content.contains("hello"));
+}
+
+#[tokio::test]
+async fn shell_exec_returns_error_for_bad_command() {
+    let tool = crate::shell_exec::ShellExec::new();
+    let result = tool.execute(serde_json::json!({"command": "exit 1"})).await;
+    assert!(result.is_error);
+}
+
+// --- GitOp tests ---
+#[tokio::test]
+async fn git_op_status_works() {
+    let tool = crate::git_op::GitOp::new();
+    let result = tool.execute(serde_json::json!({"operation": "status"})).await;
+    assert!(!result.is_error);
+}
+
+// --- CodeSearch tests ---
+#[tokio::test]
+async fn code_search_finds_pattern() {
+    let tool = crate::code_search::CodeSearch::new();
+    let result = tool.execute(serde_json::json!({"pattern": "harness-core", "path": "."})).await;
+    assert!(!result.is_error);
+    assert!(result.content.contains("Cargo.toml"));
+}
