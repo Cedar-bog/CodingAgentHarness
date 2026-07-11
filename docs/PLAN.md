@@ -333,7 +333,7 @@ git commit -m "feat: convert to cargo workspace, add shared types and error type
 - Consumes: `Message`, `ToolCall`, `FinishReason`, `Usage`, `ToolSchema` from `harness-core`
 - Produces: `LlmProvider` trait, `MockLlmProvider`, `CompletionRequest`, `CompletionResponse`
 
-- [ ] **Step 1: Create harness-llm crate**
+- [x] **Step 1: Create harness-llm crate**
 
 Create `crates/harness-llm/Cargo.toml`:
 
@@ -355,7 +355,7 @@ tokio = { workspace = true }
 tokio = { workspace = true, features = ["test-util"] }
 ```
 
-- [ ] **Step 2: Write the failing test for MockLlmProvider**
+- [x] **Step 2: Write the failing test for MockLlmProvider**
 
 Create `crates/harness-llm/src/mock_tests.rs`:
 
@@ -435,12 +435,12 @@ async fn mock_returns_error_when_no_responses_left() {
 }
 ```
 
-- [ ] **Step 3: Run test to verify it fails**
+- [x] **Step 3: Run test to verify it fails**
 
 Run: `cargo test -p harness-llm`
 Expected: FAIL — `mock.rs` does not exist yet
 
-- [ ] **Step 4: Write LlmProvider trait and MockLlmProvider**
+- [x] **Step 4: Write LlmProvider trait and MockLlmProvider**
 
 Create `crates/harness-llm/src/lib.rs`:
 
@@ -518,12 +518,12 @@ Update `crates/harness-llm/src/lib.rs` to include test module:
 mod mock_tests;
 ```
 
-- [ ] **Step 5: Run tests to verify they pass**
+- [x] **Step 5: Run tests to verify they pass**
 
 Run: `cargo test -p harness-llm`
 Expected: 3 tests PASS
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add crates/harness-llm/

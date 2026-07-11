@@ -110,14 +110,28 @@
 - **合并**: `feat/task-1-workspace-types` → `master`（`--no-ff`）
 - **人工干预**: 无
 
+### 013 | Task 2: LLM Abstraction Layer + Mock Provider
+- **时间**: Task 1 完成后
+- **触发技能**: subagent-driven-development
+- **操作**: 创建分支 `feat/task-2-llm-abstraction`，分 RED/GREEN 两阶段派发 subagent
+- **TDD 过程**:
+  - RED: subagent 写 `mock_tests.rs` + `lib.rs`（无 mock.rs）→ commit `3fd25e7` → push → CI #14 **failure** ✅
+  - GREEN: subagent 写 `mock.rs` → commit `5420ca6` → push → CI #15 **success** ✅
+- **产出**: `harness-llm` crate（LlmProvider trait + MockLlmProvider + CompletionRequest）
+- **CI 验证**: RED 正确失败，GREEN 正确通过
+- **commit**: `3fd25e7` (RED) + `5420ca6` (GREEN)
+- **合并**: `feat/task-2-llm-abstraction` → `master`（`--no-ff`）
+- **人工干预**: 无
+- **教训**: subagent 两个 push 太快会导致 CI 只跑最终状态，必须分两次独立 dispatch
+
 ---
 
 ## 统计
 
 | 指标 | 值 |
 |------|-----|
-| 总 commit 数 | 8 |
-| 实现阶段 task 完成数 | 2/18（Task 0, Task 1） |
+| 总 commit 数 | 10 |
+| 实现阶段 task 完成数 | 3/18（Task 0, 1, 2） |
 | brainstorming 提问轮次 | 6（维度/供应商/架构/工具/护栏/记忆） |
 | 设计迭代轮次 | 3（工具集/护栏范围/记忆深度） |
 | AI 建议采纳 | 4（OpenAI格式/三层记忆/Arc/CompletionResponse位置） |
