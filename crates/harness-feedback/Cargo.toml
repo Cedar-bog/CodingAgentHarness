@@ -1,0 +1,8 @@
+[package]
+name = "harness-feedback"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+harness-core = { path = "../harness-core" }
+regex = "1"

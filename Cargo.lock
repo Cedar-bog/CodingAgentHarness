@@ -262,6 +262,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "harness-feedback"
+version = "0.1.0"
+dependencies = [
+ "harness-core",
+ "regex",
+]
+
+[[package]]
 name = "harness-guard"
 version = "0.1.0"
 dependencies = [
