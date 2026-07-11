@@ -145,7 +145,47 @@ async fn git_op_status_works() {
     assert!(!result.is_error);
 }
 
-// --- CodeSearch tests ---
+// --- Plugin tests ---
+use crate::plugin::{Plugin, PluginLoader, PluginContext};
+use std::sync::Arc;
+
+struct TestPlugin;
+
+#[async_trait::async_trait]
+impl Tool for TestPlugin {
+    fn name(&self) -> &str { "test_plugin" }
+    fn description(&self) -> &str { "test" }
+    fn parameters_schema(&self) -> serde_json::Value {
+        serde_json::json!({ "type": "object", "properties": {} })
+    }
+    async fn execute(&self, _args: serde_json::Value) -> harness_core::ToolResult {
+        harness_core::ToolResult { tool_call_id: String::new(), content: "plugin works".into(), is_error: false }
+    }
+}
+
+#[async_trait::async_trait]
+impl Plugin for TestPlugin {
+    fn version(&self) -> &str { "0.1.0" }
+    fn dependencies(&self) -> Vec<&str> { vec![] }
+    fn init(&mut self, _ctx: &PluginContext) -> harness_core::Result<()> { Ok(()) }
+}
+
+#[tokio::test]
+async fn plugin_loader_registers_plugins() {
+    let mut loader = PluginLoader::new();
+    loader.register(Arc::new(TestPlugin));
+    assert_eq!(loader.list().len(), 1);
+}
+
+#[tokio::test]
+async fn plugin_loader_loads_into_registry() {
+    let mut loader = PluginLoader::new();
+    loader.register(Arc::new(TestPlugin));
+    let mut registry = crate::ToolRegistry::new();
+    loader.load_all(&mut registry).unwrap();
+    let result = registry.execute("test_plugin", &serde_json::json!({})).await.unwrap();
+    assert_eq!(result.content, "plugin works");
+}
 #[tokio::test]
 async fn code_search_finds_pattern() {
     let tool = crate::code_search::CodeSearch::new();

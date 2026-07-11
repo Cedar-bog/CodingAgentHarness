@@ -3,6 +3,7 @@ pub mod write_file;
 pub mod shell_exec;
 pub mod git_op;
 pub mod code_search;
+pub mod plugin;
 
 use async_trait::async_trait;
 use harness_core::{ToolResult, ToolSchema, FunctionSchema};
