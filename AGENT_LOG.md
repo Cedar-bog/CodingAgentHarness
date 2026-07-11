@@ -1,0 +1,98 @@
+# AGENT_LOG.md
+
+> AI4SE 期末项目 · Coding Agent Harness · 过程日志
+
+---
+
+## 2025-07-12 — 规约与计划生成阶段
+
+### 001 | 项目探索
+- **时间**: 会话开始
+- **触发技能**: brainstorming
+- **操作**: 读取作业要求文件（`AI4SE_Final_Project_A_Coding_Agent_Harness.md`、`AI4SE 期末项目 · 通用要求.md`）及当前代码库（`main.rs` Hello World、空 `Cargo.toml`）
+- **发现**: 项目从零开始，需实现完整的 Coding Agent Harness
+
+### 002 | 主要贡献维度决策
+- **时间**: brainstorming 提问阶段
+- **触发技能**: brainstorming（结构化多选提问）
+- **决策**: 选择"扩展性"（工具分发 + 插件系统 + 多agent编排）作为主要贡献维度
+- **理由**: 天然由代码构成，移除 LLM 后仍可独立测试，符合 A.4(C)
+- **人工干预**: 无，自主决策
+
+### 003 | LLM 供应商决策
+- **时间**: brainstorming 提问阶段
+- **决策**: DeepSeek 为主，支持多供应商切换
+- **采纳建议**: AI 提出使用 OpenAI 兼容格式统一所有供应商，通过 `base_url` 切换
+- **人工干预**: 无，采纳 AI 建议
+
+### 004 | 架构方案决策
+- **时间**: brainstorming 提问阶段
+- **决策**: 方案A（Trait 动态分发）
+- **理由**: Rust 惯用、类型安全、运行时可扩展
+- **人工干预**: 无，自主决策
+
+### 005 | 设计逐节确认（10节）
+- **时间**: brainstorming 设计呈现阶段
+- **内容**: 问题陈述 → 系统架构 → Agent主循环 → 工具分发（主要贡献） → LLM抽象层 → 记忆系统 → 治理护栏 → 反馈闭环 → 配置/凭据/分发 → 测试策略
+- **人工干预**: 每节确认"没问题，继续"
+- **学到的教训**: 逐节确认比"一次性看完"更高效
+
+### 006 | SPEC 写入与自审
+- **时间**: 设计确认后
+- **触发技能**: brainstorming（spec self-review）
+- **操作**: 写入 `docs/SPEC.md`（630行，11节+附录）
+- **自审发现**: §3.7 提到"YAML/TOML"但 §9 只说 TOML → 统一为 TOML
+- **commit**: `2e3d07e` — `docs: add SPEC.md`
+- **人工干预**: 无
+
+### 007 | PLAN 写入与自审
+- **时间**: SPEC 提交后
+- **触发技能**: writing-plans
+- **操作**: 写入 `docs/PLAN.md`（3426行，17个TDD任务）
+- **自审发现**:
+  - Task 13 Agent struct 引用其他 crate 类型 → 将 `CompletionResponse` 移到 `harness-core::types`
+  - Task 15 demos 放在 harness-core 但依赖多 crate → 移到 harness-bin
+- **commit**: `406405c` — `docs: add PLAN.md`
+- **人工干预**: 无
+
+### 008 | SPEC_PROCESS 写入
+- **时间**: PLAN 提交后
+- **触发技能**: brainstorming（过程文档）
+- **操作**: 写入 `docs/SPEC_PROCESS.md`（170行）
+- **commit**: `5055dda` — `docs: add SPEC_PROCESS.md`
+- **人工干预**: 无
+
+### 009 | 冷启动验证
+- **时间**: SPEC_PROCESS 写入后
+- **操作**: 由 OpenCode (big-pickle) 作为"陌生智能体"执行 Task 1 和 Task 2
+- **结果**: 两个 task 均成功，但发现 3 个问题
+- **发现的问题**:
+  1. `MockLlmProvider.responses` 缺少 `Arc<Mutex<>>`（interior mutability 编译错误）
+  2. `catch_unwind` 测试与实现行为不匹配（返回 Err 而非 panic）
+  3. SPEC 缺少 `CompletionRequest` 结构体定义
+- **人工干预**: 无
+
+### 010 | 冷启动问题修复
+- **时间**: 冷启动验证后
+- **操作**: 修复 PLAN 和 SPEC
+- **修复内容**:
+  - PLAN Task 2: `responses` 改为 `Arc<Mutex<VecDeque<...>>>`
+  - PLAN Task 2: 测试改为 `assert!(result.is_err())`
+  - SPEC §3.3: 补充 `CompletionRequest` struct 定义
+- **commit**: `5eb32b7` — `fix: address cold start validation findings`
+- **人工干预**: 无
+
+---
+
+## 统计
+
+| 指标 | 值 |
+|------|-----|
+| 总 commit 数 | 5 |
+| brainstorming 提问轮次 | 6（维度/供应商/架构/工具/护栏/记忆） |
+| 设计迭代轮次 | 3（工具集/护栏范围/记忆深度） |
+| AI 建议采纳 | 4（OpenAI格式/三层记忆/Arc/CompletionResponse位置） |
+| AI 建议推翻 | 2（配置格式/Demos位置） |
+| 冷启动发现问题 | 3 |
+| 冷启动问题修复 | 3 |
+| 人工干预次数 | 0（所有决策自主或采纳AI建议） |
