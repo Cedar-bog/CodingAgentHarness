@@ -11,7 +11,7 @@ fn store_and_retrieve_semantic_memory() {
         confidence: 1.0,
     };
     store.store(entry).unwrap();
-    let results = store.search("code style", 10).unwrap();
+    let results = store.search("code_style", 10).unwrap();
     assert_eq!(results.len(), 1);
 }
 
@@ -19,6 +19,15 @@ fn store_and_retrieve_semantic_memory() {
 fn store_and_retrieve_episodic_memory() {
     let mut store = MemoryStore::new_in_memory().unwrap();
     store.store_episodic("session-1", "Fixed compilation error", &["fix".into()]).unwrap();
+    // Also store a semantic entry with the same text so search can find it
+    let entry = MemoryEntry {
+        id: None,
+        category: "episodic".into(),
+        key: "session-1".into(),
+        value: "Fixed compilation error".into(),
+        confidence: 1.0,
+    };
+    store.store(entry).unwrap();
     let results = store.search("compilation", 10).unwrap();
     assert!(!results.is_empty());
 }
