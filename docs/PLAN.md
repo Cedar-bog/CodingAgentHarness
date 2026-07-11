@@ -356,7 +356,7 @@ async fn mock_records_all_requests() {
 }
 
 #[tokio::test]
-async fn mock_panics_when_no_responses_left() {
+async fn mock_returns_error_when_no_responses_left() {
     let mock = MockLlmProvider::new(vec![]);
     let req = CompletionRequest {
         messages: vec![Message { role: Role::User, content: "hi".into(), tool_calls: vec![], tool_call_id: None }],
@@ -364,8 +364,8 @@ async fn mock_panics_when_no_responses_left() {
         temperature: 0.0,
         max_tokens: 100,
     };
-    let result = std::panic::AssertUnwindSafe(mock.complete(req));
-    assert!(result.catch_unwind().await.is_err());
+    let result = mock.complete(req).await;
+    assert!(result.is_err());
 }
 ```
 
@@ -413,14 +413,14 @@ use std::collections::VecDeque;
 use std::sync::{Arc, Mutex};
 
 pub struct MockLlmProvider {
-    responses: VecDeque<CompletionResponse>,
+    responses: Arc<Mutex<VecDeque<CompletionResponse>>>,
     call_log: Arc<Mutex<Vec<CompletionRequest>>>,
 }
 
 impl MockLlmProvider {
     pub fn new(responses: Vec<CompletionResponse>) -> Self {
         Self {
-            responses: responses.into(),
+            responses: Arc::new(Mutex::new(responses.into())),
             call_log: Arc::new(Mutex::new(Vec::new())),
         }
     }
@@ -435,6 +435,8 @@ impl LlmProvider for MockLlmProvider {
     async fn complete(&self, request: CompletionRequest) -> harness_core::Result<CompletionResponse> {
         self.call_log.lock().unwrap().push(request);
         self.responses
+            .lock()
+            .unwrap()
             .pop_front()
             .ok_or_else(|| harness_core::HarnessError::Llm("No preset responses left".into()))
     }

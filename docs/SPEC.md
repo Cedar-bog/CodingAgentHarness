@@ -118,6 +118,13 @@ pub trait Plugin: Tool {
 **LLM Provider trait**：
 
 ```rust
+pub struct CompletionRequest {
+    pub messages: Vec<Message>,
+    pub tools: Option<Vec<ToolSchema>>,
+    pub temperature: f32,
+    pub max_tokens: usize,
+}
+
 #[async_trait]
 pub trait LlmProvider: Send + Sync {
     async fn complete(&self, request: CompletionRequest) -> Result<CompletionResponse>;
