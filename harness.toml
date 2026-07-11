@@ -1,0 +1,23 @@
+[agent]
+max_turns = 50
+max_tools_per_turn = 5
+max_fix_rounds = 3
+
+[llm]
+provider = "deepseek"
+model = "deepseek-chat"
+api_key_env = "DEEPSEEK_API_KEY"
+base_url = "https://api.deepseek.com"
+temperature = 0.0
+max_tokens = 4096
+
+[guardrails]
+mode = "strict"
+timeout_seconds = 60
+
+[memory]
+max_context_tokens = 2000
+db_path = ".harness/memory.db"
+
+[tools]
+allowed = ["read_file", "write_file", "shell_exec", "git_op", "code_search"]
