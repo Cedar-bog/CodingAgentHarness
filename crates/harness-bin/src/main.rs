@@ -70,6 +70,8 @@ async fn main() -> Result<()> {
         }
     }
 
+    let mut fix_rounds_used = 0usize;
+
     loop {
         // Inject relevant memory entries based on the latest user message
         if let Ok(entries) = memory.search(&task, 5) {
@@ -102,6 +104,7 @@ async fn main() -> Result<()> {
 
         agent.add_assistant_message(response.message.clone());
 
+        let mut had_failure = false;
         let actions = agent.parse_actions(&response);
         for action in actions {
             match action {
@@ -121,10 +124,12 @@ async fn main() -> Result<()> {
                                             let fb = feedback.validate(&result);
                                             if !fb.is_success {
                                                 eprintln!("[FEEDBACK] {}", fb.summary);
+                                                had_failure = true;
                                             }
                                             agent.add_tool_result(result);
                                         }
                                         Err(e) => {
+                                            had_failure = true;
                                             agent.add_tool_result(ToolResult {
                                                 tool_call_id: tc.id.clone(),
                                                 content: format!("Tool error: {}", e),
@@ -133,6 +138,7 @@ async fn main() -> Result<()> {
                                         }
                                     }
                                 } else {
+                                    had_failure = true;
                                     agent.add_tool_result(ToolResult {
                                         tool_call_id: tc.id.clone(),
                                         content: format!("BLOCKED by guardrail: {}", reason),
@@ -150,10 +156,12 @@ async fn main() -> Result<()> {
                                             let fb = feedback.validate(&result);
                                             if !fb.is_success {
                                                 eprintln!("[FEEDBACK] {}", fb.summary);
+                                                had_failure = true;
                                             }
                                             agent.add_tool_result(result);
                                         }
                                         Err(e) => {
+                                            had_failure = true;
                                             agent.add_tool_result(ToolResult {
                                                 tool_call_id: tc.id.clone(),
                                                 content: format!("Tool error: {}", e),
@@ -162,6 +170,7 @@ async fn main() -> Result<()> {
                                         }
                                     }
                                 } else {
+                                    had_failure = true;
                                     agent.add_tool_result(ToolResult {
                                         tool_call_id: tc.id.clone(),
                                         content: format!("BLOCKED by guardrail: {}", reason),
@@ -202,6 +211,17 @@ async fn main() -> Result<()> {
         }
 
         agent.turn_count += 1;
+
+        if had_failure && fix_rounds_used < config.agent.max_fix_rounds {
+            fix_rounds_used += 1;
+            agent.conversation.push(Message {
+                role: Role::System,
+                content: format!("The previous tool calls had failures. Please fix the issues and try again. (Fix round {}/{})", fix_rounds_used, config.agent.max_fix_rounds),
+                tool_calls: None,
+                tool_call_id: None,
+            });
+            continue;
+        }
     }
 
     Ok(())
