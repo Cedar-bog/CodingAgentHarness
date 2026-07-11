@@ -41,7 +41,7 @@ async fn main() -> Result<()> {
     let guardrail = Guardrail::new_default();
     let hitl = StdioHitlConfirmer;
     let feedback = FeedbackValidator::new_default();
-    let _memory = MemoryStore::new(&config.memory.db_path)
+    let memory = MemoryStore::new(&config.memory.db_path)
         .unwrap_or_else(|_| MemoryStore::new_in_memory().unwrap());
 
     let mut agent = Agent::new(AgentConfig {
@@ -56,7 +56,36 @@ async fn main() -> Result<()> {
 
     agent.add_user_message(&task);
 
+    // Inject semantic memory by category at the start
+    for category in &["project_convention", "user_preference"] {
+        if let Ok(entries) = memory.by_category(category) {
+            for entry in &entries {
+                agent.conversation.push(Message {
+                    role: Role::System,
+                    content: format!("[Memory: {} = {}]", entry.key, entry.value),
+                    tool_calls: None,
+                    tool_call_id: None,
+                });
+            }
+        }
+    }
+
     loop {
+        // Inject relevant memory entries based on the latest user message
+        if let Ok(entries) = memory.search(&task, 5) {
+            for entry in &entries {
+                let mem_msg = format!("[Memory: {} = {}]", entry.key, entry.value);
+                if !agent.conversation.iter().any(|m| m.content == mem_msg) {
+                    agent.conversation.push(Message {
+                        role: Role::System,
+                        content: mem_msg,
+                        tool_calls: None,
+                        tool_call_id: None,
+                    });
+                }
+            }
+        }
+
         let req = CompletionRequest {
             messages: agent.conversation.clone(),
             tools: Some(tools.to_llm_tools()),
