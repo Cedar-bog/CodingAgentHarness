@@ -7,6 +7,10 @@ edition = "2024"
 name = "harness"
 path = "src/main.rs"
 
+[[bin]]
+name = "demo"
+path = "src/bin/demo.rs"
+
 [dependencies]
 harness-core = { path = "../harness-core" }
 harness-llm = { path = "../harness-llm" }
