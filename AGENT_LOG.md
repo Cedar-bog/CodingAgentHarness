@@ -84,11 +84,24 @@
 
 ---
 
+## 2025-07-12 — 实现阶段
+
+### 011 | Task 0: GitHub Actions CI Setup
+- **时间**: 实现阶段开始
+- **操作**: 创建 `.github/workflows/ci.yml`，配置 unit-test job
+- **CI 内容**: push/PR 触发 → checkout → Rust toolchain → cargo test --workspace
+- **分支**: `feat/ci-setup` → 合并到 master
+- **commit**: `1aa8f79` — `ci: add GitHub Actions workflow with unit-test job`
+- **人工干预**: 无
+
+---
+
 ## 统计
 
 | 指标 | 值 |
 |------|-----|
-| 总 commit 数 | 5 |
+| 总 commit 数 | 7 |
+| 实现阶段 task 完成数 | 1/18（Task 0） |
 | brainstorming 提问轮次 | 6（维度/供应商/架构/工具/护栏/记忆） |
 | 设计迭代轮次 | 3（工具集/护栏范围/记忆深度） |
 | AI 建议采纳 | 4（OpenAI格式/三层记忆/Arc/CompletionResponse位置） |

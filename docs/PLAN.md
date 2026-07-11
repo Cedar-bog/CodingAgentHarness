@@ -66,13 +66,13 @@ crates/
 - Consumes: none (infrastructure)
 - Produces: CI pipeline that runs `cargo test --workspace` on every push and PR
 
-- [ ] **Step 1: Create workflow directory**
+- [x] **Step 1: Create workflow directory**
 
 ```bash
 mkdir -p .github/workflows
 ```
 
-- [ ] **Step 2: Create CI workflow**
+- [x] **Step 2: Create CI workflow**
 
 Create `.github/workflows/ci.yml`:
 
@@ -97,7 +97,7 @@ jobs:
         run: cargo test --workspace
 ```
 
-- [ ] **Step 3: Verify workflow syntax**
+- [x] **Step 3: Verify workflow syntax**
 
 ```bash
 cat .github/workflows/ci.yml
@@ -105,7 +105,7 @@ cat .github/workflows/ci.yml
 
 Expected: valid YAML with `unit-test` job
 
-- [ ] **Step 4: Commit and push**
+- [x] **Step 4: Commit and push**
 
 ```bash
 git checkout -b feat/ci-setup
@@ -114,11 +114,11 @@ git commit -m "ci: add GitHub Actions workflow with unit-test job"
 git push -u origin feat/ci-setup
 ```
 
-- [ ] **Step 5: Create PR and verify CI passes**
+- [x] **Step 5: Create PR and verify CI passes**
 
 Create PR from `feat/ci-setup` → `master`. CI must show `unit-test` job passing.
 
-- [ ] **Step 6: Merge PR**
+- [x] **Step 6: Merge PR**
 
 ---
 
