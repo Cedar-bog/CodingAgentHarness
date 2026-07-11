@@ -542,7 +542,7 @@ git commit -m "feat: add LLM abstraction layer with mock provider"
 - Consumes: `LlmProvider` trait, `CompletionRequest`, `CompletionResponse` from Task 2
 - Produces: `OpenAiCompatibleProvider`
 
-- [ ] **Step 1: Write failing test for OpenAI provider serialization**
+- [x] **Step 1: Write failing test for OpenAI provider serialization**
 
 Create `crates/harness-llm/src/openai_tests.rs`:
 
@@ -605,12 +605,12 @@ fn provider_name_and_metadata() {
 }
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `cargo test -p harness-llm -- openai`
 Expected: FAIL — `openai.rs` does not exist
 
-- [ ] **Step 3: Implement OpenAiCompatibleProvider**
+- [x] **Step 3: Implement OpenAiCompatibleProvider**
 
 Create `crates/harness-llm/src/openai.rs`:
 
@@ -757,12 +757,12 @@ mod mock_tests;
 mod openai_tests;
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `cargo test -p harness-llm`
 Expected: 5 tests PASS (3 mock + 2 openai)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add crates/harness-llm/
