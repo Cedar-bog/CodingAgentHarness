@@ -1,3 +1,6 @@
+pub mod read_file;
+pub mod write_file;
+
 use async_trait::async_trait;
 use harness_core::{ToolResult, ToolSchema, FunctionSchema};
 use std::collections::HashMap;
