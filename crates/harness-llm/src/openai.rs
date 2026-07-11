@@ -88,6 +88,16 @@ impl LlmProvider for OpenAiCompatibleProvider {
             .await
             .map_err(|e| harness_core::HarnessError::Http(e.to_string()))?;
 
+        let status = resp.status();
+        if !status.is_success() {
+            let error_text = resp.text().await.unwrap_or_default();
+            return Err(harness_core::HarnessError::Api(format!(
+                "HTTP {}: {}",
+                status.as_u16(),
+                error_text
+            )));
+        }
+
         let json: serde_json::Value = resp
             .json()
             .await
