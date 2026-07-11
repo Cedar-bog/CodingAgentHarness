@@ -1097,7 +1097,7 @@ git commit -m "feat: add Tool trait and ToolRegistry with dynamic dispatch"
 - Consumes: `Tool` trait from Task 4
 - Produces: `ReadFile` tool, `WriteFile` tool
 
-- [ ] **Step 1: Write failing test for ReadFile**
+- [x] **Step 1: Write failing test for ReadFile**
 
 Add to `crates/harness-tools/src/registry_tests.rs`:
 
@@ -1121,12 +1121,12 @@ async fn read_file_tool_returns_error_for_missing() {
 }
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `cargo test -p harness-tools -- read_file`
 Expected: FAIL
 
-- [ ] **Step 3: Implement ReadFile**
+- [x] **Step 3: Implement ReadFile**
 
 Create `crates/harness-tools/src/read_file.rs`:
 
@@ -1185,12 +1185,12 @@ impl Tool for ReadFile {
 }
 ```
 
-- [ ] **Step 4: Run ReadFile tests**
+- [x] **Step 4: Run ReadFile tests**
 
 Run: `cargo test -p harness-tools -- read_file`
 Expected: 2 tests PASS
 
-- [ ] **Step 5: Write failing test for WriteFile**
+- [x] **Step 5: Write failing test for WriteFile**
 
 Add to `crates/harness-tools/src/registry_tests.rs`:
 
@@ -1218,7 +1218,7 @@ async fn write_file_tool_creates_parent_dirs() {
 }
 ```
 
-- [ ] **Step 6: Implement WriteFile**
+- [x] **Step 6: Implement WriteFile**
 
 Create `crates/harness-tools/src/write_file.rs`:
 
@@ -1273,7 +1273,7 @@ impl Tool for WriteFile {
 }
 ```
 
-- [ ] **Step 7: Update lib.rs to include new modules**
+- [x] **Step 7: Update lib.rs to include new modules**
 
 Update `crates/harness-tools/src/lib.rs` — add at top:
 
@@ -1282,12 +1282,12 @@ pub mod read_file;
 pub mod write_file;
 ```
 
-- [ ] **Step 8: Run all tools tests**
+- [x] **Step 8: Run all tools tests**
 
 Run: `cargo test -p harness-tools`
 Expected: All tests PASS
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add crates/harness-tools/

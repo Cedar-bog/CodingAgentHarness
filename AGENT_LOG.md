@@ -143,14 +143,24 @@
 - **合并**: `feat/task-4-tool-registry` → `master`
 - **人工干预**: 无
 
+### 016 | Task 5: ReadFile + WriteFile Tools
+- **时间**: Task 4 完成后
+- **操作**: 创建分支 `feat/task-5-read-write-tools`，分 RED/GREEN
+- **RED**: commit `9de5e1e` → CI #26 failure ✅
+- **GREEN**: commit `2d517b4` → CI #27 success ✅
+- **产出**: ReadFile（支持 offset/limit）+ WriteFile（支持父目录创建），9 tests
+- **注意**: subagent 纠正了测试路径（`crates/harness-core/` → `../harness-core/`）
+- **合并**: `feat/task-5-read-write-tools` → `master`
+- **人工干预**: 无
+
 ---
 
 ## 统计
 
 | 指标 | 值 |
 |------|-----|
-| 总 commit 数 | 14 |
-| 实现阶段 task 完成数 | 5/18（Task 0, 1, 2, 3, 4） |
+| 总 commit 数 | 16 |
+| 实现阶段 task 完成数 | 6/18（Task 0, 1, 2, 3, 4, 5） |
 | brainstorming 提问轮次 | 6（维度/供应商/架构/工具/护栏/记忆） |
 | 设计迭代轮次 | 3（工具集/护栏范围/记忆深度） |
 | AI 建议采纳 | 4（OpenAI格式/三层记忆/Arc/CompletionResponse位置） |
