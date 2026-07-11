@@ -63,8 +63,8 @@ pub struct CompletionResponse {
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ToolSchema {
-    pub name: String,
-    pub description: String,
+    #[serde(rename = "type")]
+    pub schema_type: String,
     pub function: FunctionSchema,
 }
 

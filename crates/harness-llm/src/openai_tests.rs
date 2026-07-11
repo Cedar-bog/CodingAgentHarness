@@ -18,8 +18,7 @@ fn provider_builds_correct_request_body() {
             tool_call_id: None,
         }],
         tools: Some(vec![ToolSchema {
-            name: "read_file".into(),
-            description: "Read a file".into(),
+            schema_type: "function".into(),
             function: FunctionSchema {
                 name: "read_file".into(),
                 description: "Read a file".into(),

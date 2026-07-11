@@ -65,7 +65,8 @@ async fn to_llm_tools_generates_schemas() {
 
     let schemas = registry.to_llm_tools();
     assert_eq!(schemas.len(), 1);
-    assert_eq!(schemas[0].name, "dummy");
+    assert_eq!(schemas[0].schema_type, "function");
+    assert_eq!(schemas[0].function.name, "dummy");
 }
 
 #[tokio::test]
