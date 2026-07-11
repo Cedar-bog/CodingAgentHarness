@@ -49,12 +49,6 @@
 - **当前状态**：`main.rs` 仅用 `args().nth(1)` 读取任务描述，无 `--config` 参数，无子命令
 - **涉及文件**：`crates/harness-bin/src/main.rs`
 
-### 1.7 冷启动验证未记录
-
-- **要求**：通用要求 §4.5 — 用第二个不同的 agent，仅凭 SPEC + PLAN 实现 1–2 个 task，记录过程
-- **当前状态**：`SPEC_PROCESS.md` 中未提及冷启动验证
-- **涉及文件**：`docs/SPEC_PROCESS.md`
-
 ---
 
 ## 二、修复优先级建议
@@ -71,7 +65,6 @@
 5. 实现多轮自我修正
 6. 实现 Mock 模式（替换 `todo!`）
 7. 使用 `clap` 完善 CLI 参数解析
-8. 添加冷启动验证记录到 `SPEC_PROCESS.md`
 
 ### P2（功能完善，可选）
 

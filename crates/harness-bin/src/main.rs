@@ -21,7 +21,7 @@ async fn main() -> Result<()> {
     let api_key = std::env::var(&config.llm.api_key_env).unwrap_or_default();
 
     let llm: Box<dyn LlmProvider> = if config.llm.provider == "mock" {
-        todo!("mock mode")
+        Box::new(harness_llm::mock::MockLlmProvider::new(vec![]))
     } else {
         Box::new(OpenAiCompatibleProvider::new(
             api_key,
