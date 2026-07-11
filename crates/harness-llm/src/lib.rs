@@ -3,6 +3,9 @@ pub mod mock;
 #[cfg(test)]
 mod mock_tests;
 
+#[cfg(test)]
+mod openai_tests;
+
 use async_trait::async_trait;
 use harness_core::{CompletionResponse, Message, ToolSchema};
 use serde::{Deserialize, Serialize};
